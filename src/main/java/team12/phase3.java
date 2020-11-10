@@ -728,7 +728,9 @@ public class phase3 {
         p("3. 개봉 (방영 시작) 날짜");
         p("4. 종영 날짜");
         p("5. 청소년 관람 가능 여부");
+ develop
         /* p("6. 배우"); */
+ main
         p("0. 뒤로가기");
         selection = scan.nextInt();
         phase3.clearScreen();
@@ -900,8 +902,13 @@ public class phase3 {
                     }
                 }
                 break;
+ develop
             /*case 6:
                 break;*/
+
+            case 6:
+                break;
+ main
             case 0:
                 return;
         }
