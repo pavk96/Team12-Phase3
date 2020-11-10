@@ -1127,7 +1127,6 @@ public class phase3 {
                     p((j + 1) + ". " + genre.get(j));
                 }
             } catch (SQLException e) {
-                // TODO: handle exception
                 p("error: " + e.getMessage());
             }
             p("=============");
@@ -1151,7 +1150,6 @@ public class phase3 {
                             phase3.pause();
                         }
                     } catch (SQLException e) {
-                        // TODO: handle exception
                         p("error: " + e.getMessage());
                     }
                     break;
@@ -1182,7 +1180,6 @@ public class phase3 {
                             phase3.pause();
                         }
                     } catch (SQLException e) {
-                        // TODO: handle exception
                         p("error: " + e.getMessage());
                     }
                     break;
