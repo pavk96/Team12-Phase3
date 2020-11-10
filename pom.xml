@@ -30,7 +30,7 @@
       <artifactId>postgresql</artifactId>
       <version>42.2.18</version>
       <scope>system</scope>
-      <systemPath>/home/gyujeong/Documents/team12/postgresql-42.2.18.jar</systemPath>
+      <systemPath>/home/gyujeong/Documents/postgresql-42.2.18.jar</systemPath>
     </dependency>
   </dependencies>
 
