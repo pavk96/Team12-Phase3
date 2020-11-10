@@ -982,30 +982,35 @@ public class phase3 {
     }
 
     private void enterRating(Double ratingMin, Double ratingMax) {
-        p("평가 점수 선택");
-        p("=======================================");
-        p("(0 입력 시 뒤로가기)");
-        p("최소 점수를 입력하세요 (0.0 ~ 10.0): ");
-        try {
-            ratingMin = scan.nextDouble();
-        } catch (InputMismatchException e) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMin = -1.0;
-            enterRating(ratingMin, ratingMax);
-        }
-        p("최대 점수를 입하세요 (0.0 ~ 10.0): ");
-        try {
-            ratingMax = scan.nextDouble();
-        } catch (InputMismatchException e) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMax = -1.0;
-            enterRating(ratingMin, ratingMax);
-        }
+        ratingMin = 0.0;
+        ratingMax = 0.0;
+        while (ratingMin != -1.0 && ratingMax != -1.0) {
+            p("평가 점수 선택");
+            p("=======================================");
+            p("(0 입력 시 뒤로가기)");
+            p("최소 점수를 입력하세요 (0.0 ~ 10.0): ");
+            try {
+                ratingMin = scan.nextDouble();
+            } catch (InputMismatchException e) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMin = -1.0;
+            }
+            if (ratingMin == 0.0)
+                return;
+            p("최대 점수를 입하세요 (0.0 ~ 10.0): ");
+            try {
+                ratingMax = scan.nextDouble();
+            } catch (InputMismatchException e) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMax = -1.0;
+            }
+            if (ratingMax == 0.0)
+                return;
 
-        if (ratingMin > ratingMax) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMax = ratingMin = -1.0;
-            enterRating(ratingMin, ratingMax);
+            if (ratingMin > ratingMax) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMax = ratingMin = -1.0;
+            }
         }
     }
 
@@ -1127,7 +1132,6 @@ public class phase3 {
                     p((j + 1) + ". " + genre.get(j));
                 }
             } catch (SQLException e) {
-                // TODO: handle exception
                 p("error: " + e.getMessage());
             }
             p("=============");
@@ -1151,7 +1155,6 @@ public class phase3 {
                             phase3.pause();
                         }
                     } catch (SQLException e) {
-                        // TODO: handle exception
                         p("error: " + e.getMessage());
                     }
                     break;
@@ -1182,7 +1185,6 @@ public class phase3 {
                             phase3.pause();
                         }
                     } catch (SQLException e) {
-                        // TODO: handle exception
                         p("error: " + e.getMessage());
                     }
                     break;
