@@ -1,5 +1,6 @@
 package team12;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -63,6 +64,8 @@ public class phase3 {
             phase3.clearScreen();
             switch (input_integer) {
                 case 1:
+                    p("로그인");
+                    p("==================");
                     signIn(conn);
                     break;
                 case 2:
@@ -121,6 +124,7 @@ public class phase3 {
         // 권한 확인
         int answer = 0;
         while (answer != 4) {
+            phase3.clearScreen();
             String sql = "SELECT uid FROM ACCOUNT, ADMIN WHERE Email_add = '" + email + "' AND Account_id = uid";
             try {
                 Statement stmt = conn.createStatement();
@@ -140,6 +144,7 @@ public class phase3 {
             p("3. 평가 내역 확인");
             p("4. 뒤로가기");
             answer = scan.nextInt();
+            phase3.clearScreen();
             switch (answer) {
                 case 1:
                     addMovie(conn);
@@ -202,11 +207,13 @@ public class phase3 {
                 p("0. 회원탈퇴");
 
                 selection = scan.nextInt();
+                phase3.clearScreen();
                 switch (selection) {
                     case 1:
                         if (changeName(conn, lname, fname) == 0) {
                             changeName(conn, lname, fname);
                         } else {
+                            phase3.clearScreen();
                             p("이름이 변경되었습니다.");
                         }
                         break;
@@ -214,6 +221,7 @@ public class phase3 {
                         if (changeBirthday(conn, birthday) == 0) {
                             changeBirthday(conn, birthday);
                         } else {
+                            phase3.clearScreen();
                             p("생년월일이 변경되었습니다.");
                         }
                         break;
@@ -221,6 +229,7 @@ public class phase3 {
                         if (changeSex(conn, sex) == 0) {
                             changeSex(conn, sex);
                         } else {
+                            phase3.clearScreen();
                             p("성별이 변경되었습니다.");
                         }
                         break;
@@ -228,6 +237,7 @@ public class phase3 {
                         if (changePassword(conn, password) == 0)
                             changePassword(conn, password);
                         else {
+                            phase3.clearScreen();
                             p("비밀번호가 변경되었습니다.");
                         }
                         break;
@@ -235,6 +245,7 @@ public class phase3 {
                         if (changePhone(conn, phone) == 0) {
                             changePhone(conn, phone);
                         } else {
+                            phase3.clearScreen();
                             p("전화번호가 변경되었습니다.");
                         }
                         break;
@@ -242,6 +253,7 @@ public class phase3 {
                         if (changeAddress(conn, address) == 0)
                             changeAddress(conn, address);
                         else {
+                            phase3.clearScreen();
                             p("주소가 변경되었습니다.");
                         }
                         break;
@@ -249,6 +261,7 @@ public class phase3 {
                         if (changeJob(conn, job) == 0)
                             changeJob(conn, job);
                         else {
+                            phase3.clearScreen();
                             p("직업이 변경되었습니다.");
                         }
                         break;
@@ -256,14 +269,17 @@ public class phase3 {
                         if (changeMembership(conn, membership) == 0)
                             changeMembership(conn, membership);
                         else {
+                            phase3.clearScreen();
                             p("멤버쉽이 변경되었습니다.");
                         }
                         break;
                     case 9:
                         return;
                     case 0:
-                        if (withdraw(conn) != 0)
+                        if (withdraw(conn) != 0) {
+                            phase3.clearScreen();
                             p("회원탈퇴가 완료되었습니다...");
+                        }
                         break;
                 }
             } catch (SQLException e) {
@@ -302,35 +318,48 @@ public class phase3 {
     private int afterSelectMovie(Connection conn, int mid, int uid, boolean isAdmin) {
         int res = 0;
         int selection = 0;
+        boolean isError = false;
 
         while (res == 0) {
+            isError = false;
             if (!isAdmin) {
                 p("1. 평가하기");
             }
             if (isAdmin) {
-                p("2. Update");
+                p("2. 수정하기");
             }
             p("0. 뒤로가기");
             selection = scan.nextInt();
             if (selection == 1) {
-                p("평가 하실 점수를 입력해주세요.");
-                int rating = scan.nextInt();
-                String sql = "INSERT INTO RATING (Single_rating, mid, uid) " + "VALUES (" + rating + ", " + mid + ", "
-                        + uid + ")";
+                p("평가 하실 점수를 입력해주세요. (0 ~ 10)");
+                int rating = 0;
                 try {
-                    Statement stmt = conn.createStatement();
-                    res = stmt.executeUpdate(sql);
-                    if (res == 1)
-                        p("평가가 등록 되었습니다.");
-                    else
-                        p("잘못 입력하셨습니다.");
-                } catch (SQLException e) {
+                    rating = scan.nextInt();
+                } catch (InputMismatchException e) {
                     p("잘못 입력하셨습니다.");
+                    scan.nextLine();
+                    isError = true;
+                }
+                if (!isError) {
+                    String sql = "INSERT INTO RATING (Single_rating, mid, uid) " + "VALUES (" + rating + ", " + mid
+                            + ", " + uid + ")";
+                    try {
+                        Statement stmt = conn.createStatement();
+                        res = stmt.executeUpdate(sql);
+                        if (res == 1) {
+                            phase3.clearScreen();
+                            p("평가가 등록 되었습니다.");
+                        }
+                    } catch (SQLException e) {
+                        p("잘못 입력하셨습니다.");
+                    }
                 }
             } else if (selection == 2) {
+                phase3.clearScreen();
                 updateMovie(conn, mid);
                 return 9;
             } else {
+                phase3.clearScreen();
                 return selection;
             }
         }
@@ -353,14 +382,18 @@ public class phase3 {
                 try {
                     Statement stmt = conn.createStatement();
                     res = stmt.executeUpdate(sql);
-                    if (res == 1)
+                    if (res == 1) {
+                        phase3.clearScreen();
                         p("평가가 수정 되었습니다.");
-                    else
+                    } else {
+                        phase3.clearScreen();
                         p("잘못 입력하셨습니다.");
+                    }
                 } catch (SQLException e) {
                     p("잘못 입력하셨습니다.");
                 }
             } else {
+                phase3.clearScreen();
                 return selection;
             }
         }
@@ -600,12 +633,14 @@ public class phase3 {
 
     private int withdraw(Connection conn) {
         try {
+            phase3.clearScreen();
             Statement stmt = conn.createStatement();
             p("정말로 회원탈퇴를 하시겠습니까??");
             p("1. 네");
             p("2. 아니요.");
             int answer = scan.nextInt();
             if (answer == 1) {
+                phase3.clearScreen();
                 p("진짜요??");
                 p("1. 네;;");
                 p("2. 아니요.");
@@ -625,12 +660,12 @@ public class phase3 {
 
     // 영화 추가
     private void addMovie(Connection conn) {
-
         p("영상물 추가");
         p("===========================");
         p("Original title을 입력하세요.");
         scan.nextLine();
         String originalTitle = scan.nextLine();
+        p("");
         p("type을 입력하세요.");
         p("1. Movie");
         p("2. Tv Series");
@@ -645,6 +680,7 @@ public class phase3 {
             case 3:
                 type = "knuOriginal";
         }
+        p("");
         p("청소년 관람불가 여부를 입력하세요.");
         p("1. 청소년 관람 불가");
         p("0. 청소년 관람 가능");
@@ -657,11 +693,22 @@ public class phase3 {
             Statement stmt = conn.createStatement();
             int res = stmt.executeUpdate(sql);
             if (res == 1) {
+                phase3.clearScreen();
                 p("영화가 등록되었습니다");
-                adminMenu(conn);
+                try {
+                    System.in.read();
+                } catch (IOException e) {
+
+                }
+                return;
             } else {
-                p("다시 입력 해주세요.");
-                addMovie(conn);
+                p("잘못 입력하셨습니다. 다시 입력 해주세요.");
+                try {
+                    System.in.read();
+                } catch (IOException e) {
+
+                }
+                return;
             }
         } catch (SQLException e) {
             p("error: " + e.getMessage());
@@ -673,14 +720,17 @@ public class phase3 {
         int selection = -1;
         p("영상물 수정");
         p("=================");
-        p("1. Genre");
-        p("2. Type");
-        p("3. Start_year");
-        p("4. End_year");
-        p("5. Is_adult");
-        p("6. Actor");
-        p("0. Go_back");
+        p("수정 하실 내용을 선택해주세요.");
+        p("");
+        p("1. 장르");
+        p("2. 유형");
+        p("3. 개봉 (방영 시작) 날짜");
+        p("4. 종영 날짜");
+        p("5. 청소년 관람 가능 여부");
+        p("6. 배우");
+        p("0. 뒤로가기");
         selection = scan.nextInt();
+        phase3.clearScreen();
         switch (selection) {
             case 1:
                 updateGenre(conn, mid);
@@ -714,7 +764,7 @@ public class phase3 {
 
         while (selection != 0) {
             p("영상물 검색");
-            p("==================");
+            p("==========================");
             p("1. 제목 입력 및 검색");
             p("2. 장르 선택");
             p("3. 유형 선택");
@@ -732,7 +782,7 @@ public class phase3 {
                     break;
                 case 3:
                     p("유형 선택");
-                    p("=========");
+                    p("===================");
                     p("1. Movie");
                     p("2. TvSeries");
                     p("3. Knu Original");
@@ -755,6 +805,7 @@ public class phase3 {
                     break;
                 case 4:
                     p("개봉 국가 선택");
+                    p("=======================================");
                     p("개봉 국가를 입력 하세요 (ex) KR, JP, US...");
                     region = scan.next();
                     phase3.clearScreen();
@@ -773,6 +824,7 @@ public class phase3 {
                     break;
                 case 8:
                     p("영화 배우 선택");
+                    p("==============================");
                     p("찾으실 영화 배우를 입력하세요");
                     scan.nextLine();
                     actor = scan.nextLine();
@@ -830,7 +882,6 @@ public class phase3 {
 
     private void searchResult(ArrayList<MovieData> movieData, Connection conn, boolean isAdmin) {
 
-        phase3.clearScreen();
         p("검색 결과");
         p("=================================");
         int i = 0;
@@ -852,6 +903,7 @@ public class phase3 {
             } else {
                 p("영화를 선택 해 주세요.");
                 selection = scan.nextInt();
+                phase3.clearScreen();
                 try {
                     while (selection != 0) {
                         Statement stmt = conn.createStatement();
@@ -889,8 +941,9 @@ public class phase3 {
                         p("");
                         int insideSelection = afterSelectMovie(conn, movieData.get(selection - 1).movieId, uid,
                                 isAdmin);
-                        if (insideSelection == 0)
+                        if (insideSelection == 0) {
                             return;
+                        }
                     }
                 } catch (SQLException e) {
                 }
@@ -906,14 +959,15 @@ public class phase3 {
             p("3. 선택");
             p("0. 뒤로가기");
             selection = scan.nextInt();
-            phase3.clearScreen();
-            p("=============================");
+            if (selection != 3)
+                phase3.clearScreen();
         }
         return;
     }
 
     private String enterYear(String startOrEnd) {
         p(startOrEnd + " 선택");
+        p("=======================================");
         boolean isValid = false;
         String year = "";
         while (!isValid) {
@@ -929,6 +983,7 @@ public class phase3 {
 
     private void enterRating(Double ratingMin, Double ratingMax) {
         p("평가 점수 선택");
+        p("=======================================");
         p("(0 입력 시 뒤로가기)");
         p("최소 점수를 입력하세요 (0.0 ~ 10.0): ");
         try {
@@ -954,6 +1009,7 @@ public class phase3 {
         }
     }
 
+    // 평가 내역 확인
     private void showRatingLog(Connection conn) {
         ArrayList<MovieData> movieData = new ArrayList<MovieData>();
         int selection = 1;
@@ -973,7 +1029,7 @@ public class phase3 {
 
         }
         i = 0;
-        p("==========================");
+        p("===============================================");
         while (selection != 0) {
             if (selection == 1) {
                 for (int j = 1; j <= 10 && i < movieData.size(); j++) {
@@ -989,9 +1045,9 @@ public class phase3 {
                     i++;
                 }
             } else {
-                p("=============================");
                 p("영화를 선택해주세요");
                 selection = scan.nextInt();
+                phase3.clearScreen();
                 while (selection != 0) {
                     try {
                         Statement stmt = conn.createStatement();
@@ -1028,6 +1084,7 @@ public class phase3 {
                         p("");
                         p("");
                         int insideSelection = reRating(conn, movieData.get(selection - 1).movieId, uid);
+
                         if (insideSelection == 0)
                             return;
                     } catch (SQLException e) {
@@ -1074,10 +1131,11 @@ public class phase3 {
                 p("error: " + e.getMessage());
             }
             p("=============");
-            p("1. Add");
-            p("2. Remove");
-            p("0. Go_back");
+            p("1. 추가");
+            p("2. 삭제");
+            p("0. 뒤로가기");
             selection = scan.nextInt();
+            phase3.clearScreen();
 
             switch (selection) {
                 case 1:
@@ -1088,7 +1146,9 @@ public class phase3 {
                         Statement stmt = conn.createStatement();
                         int res = stmt.executeUpdate(sql);
                         if (res == 1) {
-                            p("Genre added!");
+                            phase3.clearScreen();
+                            p("장르가 추가되었습니다.");
+                            phase3.pause();
                         }
                     } catch (SQLException e) {
                         // TODO: handle exception
@@ -1098,7 +1158,7 @@ public class phase3 {
                 case 2:
                     try {
                         Statement stmt = conn.createStatement();
-                        p("Select genre to remove");
+                        p("삭제할 장르를 선택해주세요.");
                         p("=======================");
                         sql = "SELECT Genre, gen FROM GENRE, GENRE_OF WHERE mid = " + mid + " AND Genre_id = gen";
                         ResultSet rs = stmt.executeQuery(sql);
@@ -1117,7 +1177,9 @@ public class phase3 {
 
                         int res = stmt.executeUpdate(sql);
                         if (res == 1) {
-                            p("Genre removed!");
+                            phase3.clearScreen();
+                            p("장르가 삭제되었습니다.");
+                            phase3.pause();
                         }
                     } catch (SQLException e) {
                         // TODO: handle exception
@@ -1133,6 +1195,13 @@ public class phase3 {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static void pause() {
+        try {
+            System.in.read();
+        } catch (IOException e) {
+        }
     }
 }
 
