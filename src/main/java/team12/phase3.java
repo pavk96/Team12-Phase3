@@ -745,29 +745,30 @@ public class phase3 {
                         ResultSet rs = stmt.executeQuery(sql);
                         rs.next();
                         p("==================");
-                        p("Current Type: " + rs.getString(1));
+                        p("현재 유형: " + rs.getString(1));
                         p("");
-                        p("Select your Type");
+                        p("바꾸실 유형을 선택하세요.");
                         p("1. Movie");
                         p("2. TvSeries");
                         p("3. KnuMovie");
-                        p("0. Go_back");
+                        p("0. 뒤로가기");
                         selection = scan.nextInt();
+                        phase3.clearScreen();
                         switch (selection) {
                             case 1:
                                 sql = "UPDATE MOVIE SET Type = 'Movie' WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Complete UPDATE");
+                                p("수정 완료");
                                 break;
                             case 2:
                                 sql = "UPDATE MOVIE SET Type = 'tvSeries' WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Mission Complete");
+                                p("수정 완료");
                                 break;
                             case 3:
                                 sql = "UPDATE MOVIE SET Type = 'knuMovie' WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Mission Complete");
+                                p("수정 완료");
                                 break;
                             case 0:
                                 return;
@@ -786,10 +787,10 @@ public class phase3 {
                         ResultSet rs = stmt.executeQuery(sql);
                         rs.next();
                         p("==================");
-                        p("Current StartYear: " + rs.getString(1));
+                        p("현재 개봉 (방영 시작) 날짜: " + rs.getString(1));
                         p("==================");
-                        p("1. Update StartYear");
-                        p("0. Go_back");
+                        p("1. 날짜 수정");
+                        p("0. 뒤로가기");
                         p("===================");
                         selection = scan.nextInt();
                         switch (selection) {
@@ -798,7 +799,7 @@ public class phase3 {
                                 String pattern = "";
                                 boolean isValid = false;
                                 while (!isValid) {
-                                    p("Write you want (ex)1984-01-31");
+                                    p("바꿀 날짜를 입력해주세요. (ex)1984-01-31");
                                     year = scan.next();
                                     pattern = "^((19|20)\\d\\d)?([- /.])?(0[1-9]|1[012])([- /.])?(0[1-9]|[12][0-9]|3[01])$";
                                     isValid = Pattern.matches(pattern, year);
@@ -807,9 +808,11 @@ public class phase3 {
                                 }
                                 sql = "UPDATE MOVIE SET Start_year = '" + year + "' WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Complete UPDATE");
+                                phase3.clearScreen();
+                                p("수정 완료");
                                 break;
                             case 0:
+                                phase3.clearScreen();
                                 return;
                         }
                     } catch (SQLException e) {
@@ -826,19 +829,20 @@ public class phase3 {
                         ResultSet rs = stmt.executeQuery(sql);
                         rs.next();
                         p("==================");
-                        p("Current EndYear: " + rs.getString(1));
+                        p("현재 종영 날짜: " + rs.getString(1));
                         p("==================");
-                        p("1. Update EndYear");
-                        p("0. Go_back");
+                        p("1. 날짜 수정");
+                        p("0. 뒤로가기");
                         p("===================");
                         selection = scan.nextInt();
+                        phase3.clearScreen();
                         switch (selection) {
                             case 1:
                                 String year = "";
                                 String pattern = "";
                                 boolean isValid = false;
                                 while (!isValid) {
-                                    p("Write you want (ex)1984-01-31");
+                                    p("바꿀 날자를 입력해주세요. (ex)1984-01-31");
                                     year = scan.next();
                                     pattern = "^((19|20)\\d\\d)?([- /.])?(0[1-9]|1[012])([- /.])?(0[1-9]|[12][0-9]|3[01])$";
                                     isValid = Pattern.matches(pattern, year);
@@ -847,7 +851,7 @@ public class phase3 {
                                 }
                                 sql = "UPDATE MOVIE SET End_year = '" + year + "' WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Complete UPDATE");
+                                p("수정 완료");
                                 break;
                             case 0:
                                 return;
@@ -867,25 +871,26 @@ public class phase3 {
                         rs.next();
                         p("==================");
                         if (rs.getBoolean(1)) {
-                            p("Selected Movie is: Adult Grade");
+                            p("현재 등급: 청소년 관람 불가");
                         } else
-                            p("Selected Movie is: Not Adult Grade");
+                            p("현재 등급: 청소년 관람 가능");
                         p("");
-                        p("Select your Grade");
-                        p("1. Adult");
-                        p("2. Not Adult");
-                        p("0. Go_back");
+                        p("바꿀 등급을 선택해주세요.");
+                        p("1. 청소년 관람 불가");
+                        p("2. 청소년 관람 가능");
+                        p("0. 뒤로가기");
                         selection = scan.nextInt();
+                        phase3.clearScreen();
                         switch (selection) {
                             case 1:
                                 sql = "UPDATE MOVIE SET Is_adult = true WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Complete UPDATE");
+                                p("수정 완료");
                                 break;
                             case 2:
                                 sql = "UPDATE MOVIE SET Is_adult = false WHERE Movie_id = " + mid;
                                 stmt.executeUpdate(sql);
-                                p("Mission Complete");
+                                p("수정 완료");
                                 break;
                             case 0:
                                 return;
