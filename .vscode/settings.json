@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "java.configuration.updateBuildConfiguration": "interactive",
     "files.exclude": {
         "**/.classpath": true,
@@ -6,4 +7,7 @@
         "**/.settings": true,
         "**/.factorypath": true
     }
+=======
+    "java.configuration.updateBuildConfiguration": "interactive"
+>>>>>>> 091b08e8253b580ba194db1bc9f97059c21d65c7
 }
