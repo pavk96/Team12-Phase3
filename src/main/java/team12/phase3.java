@@ -717,6 +717,7 @@ public class phase3 {
 
     // 영상물 수정
     private void updateMovie(Connection conn, int mid) {
+        String sql = "";
         int selection = -1;
         p("영상물 수정");
         p("=================");
@@ -736,12 +737,163 @@ public class phase3 {
                 updateGenre(conn, mid);
                 break;
             case 2:
+                while (selection != 0) {
+                    try {
+                        selection = -1;
+                        sql = "SELECT Type FROM MOVIE WHERE Movie_id = " + mid;
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        rs.next();
+                        p("==================");
+                        p("Current Type: " + rs.getString(1));
+                        p("");
+                        p("Select your Type");
+                        p("1. Movie");
+                        p("2. TvSeries");
+                        p("3. KnuMovie");
+                        p("0. Go_back");
+                        selection = scan.nextInt();
+                        switch (selection) {
+                            case 1:
+                                sql = "UPDATE MOVIE SET Type = 'Movie' WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Complete UPDATE");
+                                break;
+                            case 2:
+                                sql = "UPDATE MOVIE SET Type = 'tvSeries' WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Mission Complete");
+                                break;
+                            case 3:
+                                sql = "UPDATE MOVIE SET Type = 'knuMovie' WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Mission Complete");
+                                break;
+                            case 0:
+                                return;
+                        }
+                    } catch (SQLException e) {
+                        p("error: " + e.getMessage());
+                    }
+                }
                 break;
             case 3:
+                while (selection != 0) {
+                    try {
+                        selection = -1;
+                        sql = "SELECT Start_year FROM MOVIE WHERE Movie_id = " + mid;
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        rs.next();
+                        p("==================");
+                        p("Current StartYear: " + rs.getString(1));
+                        p("==================");
+                        p("1. Update StartYear");
+                        p("0. Go_back");
+                        p("===================");
+                        selection = scan.nextInt();
+                        switch (selection) {
+                            case 1:
+                                String year = "";
+                                String pattern = "";
+                                boolean isValid = false;
+                                while (!isValid) {
+                                    p("Write you want (ex)1984-01-31");
+                                    year = scan.next();
+                                    pattern = "^((19|20)\\d\\d)?([- /.])?(0[1-9]|1[012])([- /.])?(0[1-9]|[12][0-9]|3[01])$";
+                                    isValid = Pattern.matches(pattern, year);
+                                    if (!isValid)
+                                        p("날짜 형식이 잘못 되었습니다. 다시 입력해 주세요.");
+                                }
+                                sql = "UPDATE MOVIE SET Start_year = '" + year + "' WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Complete UPDATE");
+                                break;
+                            case 0:
+                                return;
+                        }
+                    } catch (SQLException e) {
+                        p("error: " + e.getMessage());
+                    }
+                }
                 break;
             case 4:
+                while (selection != 0) {
+                    try {
+                        selection = -1;
+                        sql = "SELECT End_year FROM MOVIE WHERE Movie_id = " + mid;
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        rs.next();
+                        p("==================");
+                        p("Current EndYear: " + rs.getString(1));
+                        p("==================");
+                        p("1. Update EndYear");
+                        p("0. Go_back");
+                        p("===================");
+                        selection = scan.nextInt();
+                        switch (selection) {
+                            case 1:
+                                String year = "";
+                                String pattern = "";
+                                boolean isValid = false;
+                                while (!isValid) {
+                                    p("Write you want (ex)1984-01-31");
+                                    year = scan.next();
+                                    pattern = "^((19|20)\\d\\d)?([- /.])?(0[1-9]|1[012])([- /.])?(0[1-9]|[12][0-9]|3[01])$";
+                                    isValid = Pattern.matches(pattern, year);
+                                    if (!isValid)
+                                        p("날짜 형식이 잘못 되었습니다. 다시 입력해 주세요.");
+                                }
+                                sql = "UPDATE MOVIE SET End_year = '" + year + "' WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Complete UPDATE");
+                                break;
+                            case 0:
+                                return;
+                        }
+                    } catch (SQLException e) {
+                        p("error: " + e.getMessage());
+                    }
+                }
                 break;
             case 5:
+                while (selection != 0) {
+                    try {
+                        selection = -1;
+                        sql = "SELECT Is_adult FROM MOVIE WHERE Movie_id = " + mid;
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        rs.next();
+                        p("==================");
+                        if (rs.getBoolean(1)) {
+                            p("Selected Movie is: Adult Grade");
+                        } else
+                            p("Selected Movie is: Not Adult Grade");
+                        p("");
+                        p("Select your Grade");
+                        p("1. Adult");
+                        p("2. Not Adult");
+                        p("0. Go_back");
+                        selection = scan.nextInt();
+                        switch (selection) {
+                            case 1:
+                                sql = "UPDATE MOVIE SET Is_adult = true WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Complete UPDATE");
+                                break;
+                            case 2:
+                                sql = "UPDATE MOVIE SET Is_adult = false WHERE Movie_id = " + mid;
+                                stmt.executeUpdate(sql);
+                                p("Mission Complete");
+                                break;
+                            case 0:
+                                return;
+                        }
+                    } catch (SQLException e) {
+                        p("error: " + e.getMessage());
+                    }
+                }
                 break;
             case 6:
                 break;
@@ -754,9 +906,9 @@ public class phase3 {
     // 영화 검색
     private void queryMovie(Connection conn, boolean isAdmin) {
         String type, startYear, endYear, region, actor;
-        type = startYear = endYear = region = actor = "";
         int runningTime, genreId, selection = -1;
         double ratingMin, ratingMax;
+        type = startYear = endYear = region = actor = "";
         runningTime = genreId = -1;
         ratingMin = ratingMax = -1;
 
@@ -875,6 +1027,10 @@ public class phase3 {
                     } catch (SQLException e) {
                         p("error: " + e.getMessage());
                     }
+                    type = startYear = endYear = region = actor = "";
+                    runningTime = genreId = -1;
+                    ratingMin = ratingMax = -1;
+
                     break;
             }
         }
@@ -941,9 +1097,8 @@ public class phase3 {
                         p("");
                         int insideSelection = afterSelectMovie(conn, movieData.get(selection - 1).movieId, uid,
                                 isAdmin);
-                        if (insideSelection == 0) {
+                        if (insideSelection == 0)
                             return;
-                        }
                     }
                 } catch (SQLException e) {
                 }
@@ -953,7 +1108,6 @@ public class phase3 {
                 p("1. 다음");
             int j = i - 1;
             j /= 10;
-            j *= 10;
             if (j > 0)
                 p("2. 이전");
             p("3. 선택");
@@ -982,30 +1136,35 @@ public class phase3 {
     }
 
     private void enterRating(Double ratingMin, Double ratingMax) {
-        p("평가 점수 선택");
-        p("=======================================");
-        p("(0 입력 시 뒤로가기)");
-        p("최소 점수를 입력하세요 (0.0 ~ 10.0): ");
-        try {
-            ratingMin = scan.nextDouble();
-        } catch (InputMismatchException e) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMin = -1.0;
-            enterRating(ratingMin, ratingMax);
-        }
-        p("최대 점수를 입하세요 (0.0 ~ 10.0): ");
-        try {
-            ratingMax = scan.nextDouble();
-        } catch (InputMismatchException e) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMax = -1.0;
-            enterRating(ratingMin, ratingMax);
-        }
+        ratingMin = 0.0;
+        ratingMax = 0.0;
+        while (ratingMin != -1.0 && ratingMax != -1.0) {
+            p("평가 점수 선택");
+            p("=======================================");
+            p("(0 입력 시 뒤로가기)");
+            p("최소 점수를 입력하세요 (0.0 ~ 10.0): ");
+            try {
+                ratingMin = scan.nextDouble();
+            } catch (InputMismatchException e) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMin = -1.0;
+            }
+            if (ratingMin == 0.0)
+                return;
+            p("최대 점수를 입하세요 (0.0 ~ 10.0): ");
+            try {
+                ratingMax = scan.nextDouble();
+            } catch (InputMismatchException e) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMax = -1.0;
+            }
+            if (ratingMax == 0.0)
+                return;
 
-        if (ratingMin > ratingMax) {
-            p("잘못 입력하셨습니다. 다시 입력해주세요.");
-            ratingMax = ratingMin = -1.0;
-            enterRating(ratingMin, ratingMax);
+            if (ratingMin > ratingMax) {
+                p("잘못 입력하셨습니다. 다시 입력해주세요.");
+                ratingMax = ratingMin = -1.0;
+            }
         }
     }
 
@@ -1084,7 +1243,6 @@ public class phase3 {
                         p("");
                         p("");
                         int insideSelection = reRating(conn, movieData.get(selection - 1).movieId, uid);
-
                         if (insideSelection == 0)
                             return;
                     } catch (SQLException e) {
@@ -1219,5 +1377,4 @@ class MovieData {
     void setRating(int rating) {
         this.rating = rating;
     }
-
 }
