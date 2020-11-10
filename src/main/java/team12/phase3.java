@@ -728,7 +728,7 @@ public class phase3 {
         p("3. 개봉 (방영 시작) 날짜");
         p("4. 종영 날짜");
         p("5. 청소년 관람 가능 여부");
-        p("6. 배우");
+        /* p("6. 배우"); */
         p("0. 뒤로가기");
         selection = scan.nextInt();
         phase3.clearScreen();
@@ -899,8 +899,45 @@ public class phase3 {
                     }
                 }
                 break;
-            case 6:
-                break;
+            /*
+             * case 6: ArrayList<String> actor = new ArrayList<String>(); ArrayList<Integer>
+             * actorId = new ArrayList<Integer>(); sql = ""; int aid = 0, i = 0; while
+             * (selection != 0) { try { Statement stmt = conn.createStatement(); sql =
+             * "SELECT Actor_name, aid FROM MOVIE, ACTOR, ACTOR_OF WHERE Movie_id = " + mid
+             * + " AND mid = Movie_id AND aid = Actor_id"; ResultSet rs =
+             * stmt.executeQuery(sql); actor.clear(); actorId.clear(); while (rs.next()) {
+             * actor.add(i, rs.getString(1)); actorId.add(i, rs.getInt(2)); } for (int j =
+             * 0; j < actor.size(); j++) { p((j + 1) + ". " + actor.get(j)); } } catch
+             * (SQLException e) { // TODO: handle exception p("error: " + e.getMessage()); }
+             * p("============="); p("1. update"); p("0. 뒤로가기"); selection = scan.nextInt();
+             * phase3.clearScreen();
+             * 
+             * switch (selection) { case 1: selection = 9; for (int j = 0; j <
+             * actorId.size(); j++) { p((j + 1) + ". " + actor.get(j)); }
+             * p("Select to update"); selection = scan.nextInt(); aid =
+             * actorId.get(selection); p("Please write actor name to update");
+             * scan.nextLine(); String actorName = scan.nextLine(); sql =
+             * "UPDATE ACTOR_OF SET Character = '" + actorName + "' WHERE aid = " + aid +
+             * " AND mid = " + mid; try { Statement stmt = conn.createStatement(); int res =
+             * stmt.executeUpdate(sql); if (res == 1) { phase3.clearScreen();
+             * p("Actor가 추가되었습니다."); phase3.pause(); } } catch (SQLException e) { // TODO:
+             * handle exception p("error: " + e.getMessage()); } break; case 2: try {
+             * Statement stmt = conn.createStatement(); p("삭제할 Actor를 선택해주세요.");
+             * p("======================="); sql =
+             * "SELECT Actor, aid FROM Actor, Actor_OF WHERE mid = " + mid +
+             * " AND Actor_id = aid"; ResultSet rs = stmt.executeQuery(sql); actor.clear();
+             * actorId.clear(); while (rs.next()) { actor.add(i, rs.getString(1));
+             * actorId.add(i, rs.getInt(2)); } for (int j = 0; j < actor.size(); j++) { p((j
+             * + 1) + ". " + actor.get(j)); } p("========================"); aid =
+             * scan.nextInt(); sql = "DELETE FROM Actor_OF WHERE mid = " + mid +
+             * " AND aid = " + actorId.get(aid - 1);
+             * 
+             * int res = stmt.executeUpdate(sql); if (res == 1) { phase3.clearScreen();
+             * p("Actor가 삭제되었습니다."); phase3.pause(); } } catch (SQLException e) { // TODO:
+             * handle exception p("error: " + e.getMessage()); } break; case 0: return; } }
+             * 
+             * break;
+             */
             case 0:
                 return;
         }
