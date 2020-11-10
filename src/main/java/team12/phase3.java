@@ -910,9 +910,9 @@ public class phase3 {
     // 영화 검색
     private void queryMovie(Connection conn, boolean isAdmin) {
         String type, startYear, endYear, region, actor;
-        type = startYear = endYear = region = actor = "";
         int runningTime, genreId, selection = -1;
         double ratingMin, ratingMax;
+        type = startYear = endYear = region = actor = "";
         runningTime = genreId = -1;
         ratingMin = ratingMax = -1;
 
@@ -1031,6 +1031,10 @@ public class phase3 {
                     } catch (SQLException e) {
                         p("error: " + e.getMessage());
                     }
+                    type = startYear = endYear = region = actor = "";
+                    runningTime = genreId = -1;
+                    ratingMin = ratingMax = -1;
+
                     break;
             }
         }
